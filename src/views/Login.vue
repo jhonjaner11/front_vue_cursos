@@ -29,7 +29,7 @@
                      </v-card-text>
                      <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="primary" v-on:click="Login">Login</v-btn>
+                        <v-btn color="primary" v-on:click="login">Login</v-btn>
                      </v-card-actions>
                   </v-card>
                </v-flex>
@@ -41,7 +41,7 @@
 
 <script>
 
-import axios from "axios";
+
 export default {
    name: 'Login',
    props: {
@@ -55,16 +55,13 @@ export default {
    },
   
    methods: {
-    Login: function () {
-      
-      axios
-         .post('http://localhost:3000/api/login/', {"username":this.username})
-         .then(response => {
-            console.log(response.data[0].id);
-            this.$router.push({ name: 'Home', params: {id_user: response.data[0].id }})
-            //window.location.assign("/")
-         })
-    }
+      async login() {
+         let dataq = {user: this.username, pw: this.password};
+         await this.$store.dispatch("login",  dataq);
+         //console.log(this.$store.state.user);
+         this.$router.push("/")
+         //   login
+      }
   }
 };
 </script>

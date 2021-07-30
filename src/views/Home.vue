@@ -1,15 +1,15 @@
 <template>
 
 <v-container class="grey lighten-5">
-    <v-row
+  <v-row>
+    <v-col
       v-for="item in items" 
       :key="item.id"
       justify='center'
-      
+      cols="6"
+       
     >
-      <v-col
-        md="4"
-      >
+      
         <v-card
           class="pa-2"
           outlined
@@ -33,12 +33,18 @@
 import axios from "axios";
 export default {
   name: "Home",
-  props: ['id_user'],
+  
   
   data(){
     return{
       items: [],
       //id: 326,
+    }
+  },
+  beforeCreate: function () {
+    console.log("estado: "+this.$store.state.auth);
+    if (!this.$store.state.auth) {
+      this.$router.push("/login");
     }
   },
   components: {
@@ -49,11 +55,16 @@ export default {
     get_contenido: function (id) {
       // `this` dentro de los métodos apunta a la instancia de Vue
       this.$router.push({ name: 'Contenido', params: {id: id }})
+    },
+
+    logout: function () {
+      
+      this.$router.push("/")
     }
   },
    mounted () {
     
-    let aa = 'http://localhost:3000/api/matriculas/'+this.id_user;
+    let aa = '/matriculas/'+this.$store.state.user.id;
     axios
       .get(aa)
       .then(response => (this.items = response.data))
